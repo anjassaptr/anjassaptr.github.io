@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#home">Home</a>
+              <a class="nav-link active" aria-current="page" href="#home">home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#about">About</a>
@@ -136,15 +136,31 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-md-6 w-100 p-3">
-            <p class="text-center"><i class="bi bi-facebook"></i><a href="https://facebook.com/anjassaptr">Anjassaptr</a> <i class="bi bi-instagram"></i><a href="https://instagram.com/Anjassaptr">Anjassaptr</a></p>
-            <!-- <form>
-              <p><i class="bi bi-facebook"></i><a href="https://facebook.com/anjassaptr" class="text-black fw-bold">Anjassaptr</a></p>
-              <div class="mb-3 text-center"><i class="bi bi-facebook"></i> <a href="https://instagram.com/Anjassaptr" class="text-primary fw-bold">Anjas Sputra</a></div>
-              <div class="mb-3 text-center"><i class="bi bi-instagram"></i> <a href="https://instagram.com/Anjassaptr" class="text-primary fw-bold">Anjas Sputra</a></div>
-              <div class="mb-3"><i class="bi bi-instagram"></i> <a href="https://instagram.com/Anjassaptr" class="text-black fw-bold">Anjas Sputra</a></div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form> -->
+          <div class="col-mb-6">
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+              <strong>Terimakasih!</strong> Pesan anda sudah terkirim. Akan segera kami tanggapi.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form name="contact-form">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="name" aria-describedby="name" name="nama" />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" aria-describedby="email" name="email" />
+              </div>
+              <div class="mb-3">
+                <label for="pesan" class="form-label">Pesan</label>
+                <textarea class="form-control" id="pesan" rows="3" name="pesan"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-kirim">Kirim</button>
+
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -160,9 +176,37 @@
 
     <!-- Footer -->
     <footer class="bg-primary text-white text-center pb-1">
-      <p>Created By <a href="https://instagram.com/Anjassaptr" class="text-white fw-bold">Anjas Sputra</a></p>
+      <p>Created By <a href="https://instagram.com/Anjassaptr" class="text-white fw-bold">Anjassaptr</a></p>
     </footer>
     <!-- End Footer -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbyDUx18JVjo7Wrt1xgCSWBZrx7L5zSDh48UiW9cRhC4Nkx0l1kxjTKIhHkOHvmyRmgI/exec';
+      const form = document.forms['contact-form'];
+      const btnKirim = document.querySelector('.btn-kirim');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert = document.querySelector('.my-alert');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // ketika tombol submit diklik
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoading.classList.toggle('d-none');
+        btnKirim.classList.toggle('d-none');
+        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+          .then((response) => {
+            // tampilkan tombol kirim, hilangkan tombol loading
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            // menampilkan alert
+            myAlert.classList.toggle('d-none');
+            // menghilangkan isi form
+            form.reset();
+            console.log('Success!', response);
+          })
+          .catch((error) => console.error('Error!', error.message));
+      });
+    </script>
   </body>
 </html>
